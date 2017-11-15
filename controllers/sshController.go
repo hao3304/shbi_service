@@ -3,7 +3,6 @@ package controllers
 import (
 	"shbi_service/utrl"
 	"fmt"
-	"github.com/beego/bee/logger"
 	"github.com/astaxie/beego/logs"
 )
 
