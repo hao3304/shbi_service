@@ -1,10 +1,8 @@
 package controllers
 
 import (
-	"golang.org/x/crypto/ssh"
-	"net"
-	"bytes"
-	"os"
+	"shbi_service/utrl"
+	"fmt"
 )
 
 type SshController struct {
@@ -12,58 +10,30 @@ type SshController struct {
 }
 
 func (this *SshController)Get() {
-	this.Success("OK")
+	mail := this.GetString("mail")
+	action := this.GetString("action")
+	rep,err := doAction(action,mail)
+	if err != nil {
+		this.Success(rep)
+	}else{
+		this.Fail("执行错误",500)
+	}
 }
-//
-//func init()  {
-//	buf,err := ioutil.ReadFile("/Users/jack/go/src/shbi_service/conf/id_rsa")
-//	if err != nil {
-//		fmt.Println(buf)
-//	}
-//	key, err := ssh.ParsePrivateKey(buf)
-//	if err != nil {
-//		fmt.Println(key)
-//	}
-//}
 
-//e.g. output, err := remoteRun("root", "MY_IP", "password", "ls")
-func remoteRun(user string, addr string, password string, cmd string) (string, error) {
-	// privateKey could be read from a file, or retrieved from another storage
-	// source, such as the Secret Service / GNOME Keyring
-	// Authentication
-	config := &ssh.ClientConfig{
-		User: user,
-		Auth: []ssh.AuthMethod{
-			ssh.Password(password),
-		},
-		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
-			return nil
-		},
-		//alternatively, you could use a password
-		/*
-			Auth: []ssh.AuthMethod{
-				ssh.Password("PASSWORD"),
-			},
-		*/
+func doAction(action string,mail string) (string, error)  {
+	ssh := new(utrl.SshCMD)
+	ssh.LoadPEM("/tmp/id_rsa")
+	var cmd string
+	switch action {
+	case "locked":
+		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ma %s zimbraAccountStatus locked;/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail,mail)
+	case "active":
+		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ma %s zimbraAccountStatus active;/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail,mail)
+	default:
+		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail)
 	}
-	// Connect
-	client, err := ssh.Dial("tcp", addr+":22", config)
-	if err != nil {
-		return "", err
-	}
-	// Create a session. It is one session per command.
-	session, err := client.NewSession()
-	if err != nil {
-		return "", err
-	}
-	defer session.Close()
-	var b bytes.Buffer  // import "bytes"
-	session.Stdout = &b // get output
-	// you can also pass what gets input to the stdin, allowing you to pipe
-	// content from client to server
-	//      session.Stdin = bytes.NewBufferString("My input")
-	session.Stderr = os.Stderr
-	// Finally, run the command
-	err = session.Run(cmd)
-	return b.String(), err
+
+	return ssh.RemoteRun("nicstaff","202.121.179.34",cmd)
+
+
 }

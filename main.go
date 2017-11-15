@@ -6,23 +6,20 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/astaxie/beego/orm"
-	"shbi_service/utrl"
-	"fmt"
 )
 
 func init()  {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default","sqlite3","./db/sqlite.db")
 	orm.RunCommand()
-	fmt.Println("start ssh")
-	ssh := new(utrl.SshCMD)
-	ssh.LoadPEM("/tmp/id_rsa")
-	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","/opt/zimbra/bin/zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus locked")
+	//ssh := new(utrl.SshCMD)
+	//ssh.LoadPEM("/tmp/id_rsa")
+	//rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","/opt/zimbra/bin/zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus locked")
 
-	if err !=nil {
-		 fmt.Println(err)
-	}
-	fmt.Println(rep)
+	//if err !=nil {
+	//	 fmt.Println(err)
+	//}
+	//fmt.Println(rep)
 }
 
 func main() {
