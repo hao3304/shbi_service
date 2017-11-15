@@ -16,9 +16,8 @@ func init()  {
 	orm.RunCommand()
 	fmt.Println("start ssh")
 	ssh := new(utrl.SshCMD)
-	rsa := ssh.LoadPEM("/tmp/id_rsa")
-	fmt.Println(rsa)
-	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","pwd")
+	ssh.LoadPEM("/tmp/id_rsa")
+	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus")
 
 	if err !=nil {
 		 fmt.Println(err)
