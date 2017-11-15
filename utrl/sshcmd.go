@@ -1,40 +1,42 @@
-package controllers
+package utrl
 
 import (
 	"golang.org/x/crypto/ssh"
+	"io/ioutil"
+	"os"
 	"net"
 	"bytes"
-	"os"
 )
 
-type SshController struct {
-	BaseController
+type SshCMD struct {
+	rsa ssh.Signer
 }
 
-func (this *SshController)Get() {
-	this.Success("OK")
+
+func (k *SshCMD) LoadPEM(file string) error {
+	buf, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	key, err := ssh.ParsePrivateKey(buf)
+	if err != nil {
+		return err
+	}
+	k.rsa = key
+	return nil
 }
-//
-//func init()  {
-//	buf,err := ioutil.ReadFile("/Users/jack/go/src/shbi_service/conf/id_rsa")
-//	if err != nil {
-//		fmt.Println(buf)
-//	}
-//	key, err := ssh.ParsePrivateKey(buf)
-//	if err != nil {
-//		fmt.Println(key)
-//	}
-//}
+
 
 //e.g. output, err := remoteRun("root", "MY_IP", "password", "ls")
-func remoteRun(user string, addr string, password string, cmd string) (string, error) {
+func (k *SshCMD)RemoteRun(user string, addr string, cmd string) (string, error) {
 	// privateKey could be read from a file, or retrieved from another storage
 	// source, such as the Secret Service / GNOME Keyring
 	// Authentication
 	config := &ssh.ClientConfig{
 		User: user,
 		Auth: []ssh.AuthMethod{
-			ssh.Password(password),
+			ssh.PublicKeys(k.rsa),
+			//ssh.Password("jack2017"),
 		},
 		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 			return nil
@@ -47,7 +49,7 @@ func remoteRun(user string, addr string, password string, cmd string) (string, e
 		*/
 	}
 	// Connect
-	client, err := ssh.Dial("tcp", addr+":22", config)
+	client, err := ssh.Dial("tcp", addr+":22222", config)
 	if err != nil {
 		return "", err
 	}
@@ -67,3 +69,4 @@ func remoteRun(user string, addr string, password string, cmd string) (string, e
 	err = session.Run(cmd)
 	return b.String(), err
 }
+

@@ -6,12 +6,23 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/astaxie/beego/orm"
+	"shbi_service/utrl"
+	"fmt"
 )
 
 func init()  {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default","sqlite3","./db/sqlite.db")
 	orm.RunCommand()
+
+	ssh := new(utrl.SshCMD)
+	ssh.LoadPEM("/Users/jack/go/src/shbi_service/conf/id_rsa")
+	rep,err:=ssh.RemoteRun("nicstaff","202.121.178.34","pwd")
+
+	if err !=nil {
+		 fmt.Println(err)
+	}
+	fmt.Println(rep)
 }
 
 func main() {
