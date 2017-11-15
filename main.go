@@ -16,7 +16,7 @@ func init()  {
 	orm.RunCommand()
 
 	ssh := new(utrl.SshCMD)
-	ssh.LoadPEM("/Users/jack/go/src/shbi_service/conf/id_rsa")
+	ssh.LoadPEM("/tmp/id_rsa")
 	rep,err:=ssh.RemoteRun("nicstaff","202.121.178.34","pwd")
 
 	if err !=nil {
