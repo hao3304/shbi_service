@@ -14,10 +14,11 @@ func init()  {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default","sqlite3","./db/sqlite.db")
 	orm.RunCommand()
-
+	fmt.Println("start ssh")
 	ssh := new(utrl.SshCMD)
-	ssh.LoadPEM("/tmp/id_rsa")
-	rep,err:=ssh.RemoteRun("nicstaff","202.121.178.34","pwd")
+	rsa := ssh.LoadPEM("/tmp/id_rsa")
+	fmt.Println(rsa)
+	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","pwd")
 
 	if err !=nil {
 		 fmt.Println(err)
