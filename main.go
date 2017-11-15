@@ -17,7 +17,7 @@ func init()  {
 	fmt.Println("start ssh")
 	ssh := new(utrl.SshCMD)
 	ssh.LoadPEM("/tmp/id_rsa")
-	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus")
+	rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","/opt/zimbra/bin/zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus")
 
 	if err !=nil {
 		 fmt.Println(err)
