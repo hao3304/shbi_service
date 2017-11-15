@@ -12,9 +12,9 @@ type SshController struct {
 func (this *SshController)Get() {
 	mail := this.GetString("mail")
 	action := this.GetString("action")
-	rep,err := doAction(action,mail)
+	_,err := doAction(action,mail)
 	if err != nil {
-		this.Success(rep)
+		this.Success(mail)
 	}else{
 		this.Fail("执行错误",500)
 	}
