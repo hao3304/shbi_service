@@ -3,6 +3,8 @@ package controllers
 import (
 	"shbi_service/utrl"
 	"fmt"
+	"github.com/beego/bee/logger"
+	"github.com/astaxie/beego/logs"
 )
 
 type SshController struct {
@@ -16,6 +18,7 @@ func (this *SshController)Get() {
 	if err != nil {
 		this.Success(rep)
 	}else{
+		logs.Error(err)
 		this.Fail("执行错误",500)
 	}
 }
@@ -32,7 +35,7 @@ func doAction(action string,mail string) (string, error)  {
 	default:
 		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail)
 	}
-
+	logs.Info("cmd: %s",cmd)
 	return ssh.RemoteRun("nicstaff","202.121.179.34",cmd)
 
 
