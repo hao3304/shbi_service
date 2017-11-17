@@ -19,4 +19,3 @@ func GetAll() []Log {
 func init()  {
 	orm.RegisterModel(new(Log))
 }
-
