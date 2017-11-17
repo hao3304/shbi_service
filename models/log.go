@@ -9,6 +9,12 @@ type Log struct {
 	Created int64
 }
 
+func GetAll() []Log {
+	o:= orm.NewOrm()
+	logs := []Log{}
+	o.QueryTable("log").Limit(100).All(&logs)
+	return logs
+}
 
 func init()  {
 	orm.RegisterModel(new(Log))
