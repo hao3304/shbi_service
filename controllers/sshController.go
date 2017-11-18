@@ -4,6 +4,8 @@ import (
 	"shbi_service/utrl"
 	"fmt"
 	"github.com/astaxie/beego/logs"
+	"shbi_service/models"
+	"time"
 )
 
 type SshController struct {
@@ -16,6 +18,13 @@ func (this *SshController)Get() {
 	action := this.GetString("action")
 	rep,err := doAction(action,mail)
 	if err == nil {
+
+		log := new(models.Log)
+		log.Created = time.Now().Unix()
+		log.Mail = mail
+		log.Action = action
+		log.Add()
+
 		this.Success(rep)
 	}else{
 		logs.Error(err)
