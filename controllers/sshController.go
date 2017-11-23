@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"shbi_service/utrl"
+	"shbi_service/util"
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"shbi_service/models"
@@ -33,7 +33,7 @@ func (this *SshController)Get() {
 }
 
 func doAction(action string,mail string) (string, error)  {
-	ssh := new(utrl.SshCMD)
+	ssh := new(util.SshCMD)
 	ssh.LoadPEM("/tmp/id_rsa")
 	var cmd string
 	switch action {

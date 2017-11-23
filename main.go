@@ -13,7 +13,7 @@ func init()  {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default","sqlite3","./db/sqlite.db")
 	orm.RunCommand()
-	//ssh := new(utrl.SshCMD)
+	//ssh := new(util.SshCMD)
 	//ssh.LoadPEM("/tmp/id_rsa")
 	//rep,err:=ssh.RemoteRun("nicstaff","202.121.179.34","/opt/zimbra/bin/zmprov ga aquarius@sjtu.edu.cn zimbraAccountStatus locked")
 

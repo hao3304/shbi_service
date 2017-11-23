@@ -1,4 +1,4 @@
-package utrl
+package util
 
 import (
 	"golang.org/x/crypto/ssh"
