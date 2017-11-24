@@ -6,6 +6,9 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/astaxie/beego/orm"
+	"fmt"
+	"time"
+	"shbi_service/models"
 )
 
 func init()  {
@@ -21,6 +24,20 @@ func init()  {
 	//	 fmt.Println(err)
 	//}
 	//fmt.Println(rep)
+
+	fmt.Println("start.....")
+	o := orm.NewOrm()
+	user := models.User{UserName:"admin"}
+	err := o.Read(&user, "UserName")
+
+	if err == orm.ErrNoRows {
+		fmt.Println("end")
+		user.Password = "hao123456"
+		user.Created = time.Now().Unix()
+		o.Insert(&user)
+	}else{
+		fmt.Println("123")
+	}
 }
 
 func main() {

@@ -16,5 +16,7 @@ type User struct {
 
 func init()  {
 	orm.RegisterModel(new(User))
+
+
 }
 
