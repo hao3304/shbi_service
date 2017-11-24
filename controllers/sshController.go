@@ -23,6 +23,7 @@ func (this *SshController)Get() {
 		log.Created = time.Now().Unix()
 		log.Mail = mail
 		log.Action = action
+		log.Content = rep
 		log.Add()
 
 		this.Success(rep)

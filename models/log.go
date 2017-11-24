@@ -10,6 +10,7 @@ type Log struct {
 	Id int `orm:"pk;auto"`
 	Mail string
 	Action string
+	Content string
 	Created int64
 }
 
