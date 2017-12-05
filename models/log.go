@@ -9,6 +9,7 @@ import (
 type Log struct {
 	Id int `orm:"pk;auto"`
 	Mail string
+	UserName string
 	Action string
 	Content string
 	Created int64
@@ -30,7 +31,6 @@ func (this * Log)GetAll(page int) (interface{},error) {
 
 func (this *Log)Add() (int64, error) {
 	o := orm.NewOrm()
-	fmt.Println(this)
 	this.Created = time.Now().Unix()
 	return o.Insert(this)
 }

@@ -81,7 +81,7 @@ func (this *ModeController)Patch()  {
 		this.Fail("Query不能为空",400)
 	}
 
-	if num,err :=o.Update(&mode,"Name","Query","Index","Visible"); num>0&&err ==nil {
+	if num,err :=o.Update(mode,"Name","Query","Index","Visible"); num>0&&err ==nil {
 		this.Success("更新成功")
 	}else{
 		fmt.Println(err)

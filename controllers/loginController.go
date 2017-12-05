@@ -40,6 +40,6 @@ func (this *LoginController) Post() {
 		}
 
 	}else {
-		this.Fail("用户名或者密码错误!",10001)
+		this.Fail("用户名不存在!",10001)
 	}
 }

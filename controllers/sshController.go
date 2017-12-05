@@ -18,12 +18,13 @@ func (this *SshController)Get() {
 	action := this.GetString("action")
 	rep,err := doAction(action,mail)
 	if err == nil {
-
+		auth := this.Ctx.Input.GetData("username")
 		log := new(models.Log)
 		log.Created = time.Now().Unix()
 		log.Mail = mail
 		log.Action = action
 		log.Content = rep
+		log.UserName = auth.(string)
 		log.Add()
 
 		this.Success(rep)

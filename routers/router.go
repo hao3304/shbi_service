@@ -40,6 +40,7 @@ func init() {
 			}),
     		beego.NSRouter("/ssh", &controllers.SshController{}),
     		beego.NSRouter("/log", &controllers.LogController{}),
+    		beego.NSRouter("/user/?:id", &controllers.UserController{}),
     		beego.NSRouter("/mode/?:id", &controllers.ModeController{}),
     	)
 	beego.AddNamespace(ns)
