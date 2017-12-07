@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"strconv"
 )
 
 type UserController struct {
@@ -60,7 +61,9 @@ func (this *UserController)Delete() {
 	var id int
 	this.Ctx.Input.Bind(&id, ":id")
 	if id != 0 {
-		if num, err := orm.NewOrm().Delete(&models.User{Id:id});err == nil&&num>0 {
+		user := new(models.User)
+		user.Id = id
+		if num, err := orm.NewOrm().Delete(user);err == nil&&num>0 {
 			this.Success("删除成功！")
 		}else{
 			this.Fail("没有相关记录",400)
@@ -71,38 +74,57 @@ func (this *UserController)Delete() {
 }
 
 func (this *UserController)Patch()  {
+	var id int
+	this.Ctx.Input.Bind(&id, ":id")
 
-	auth := this.Ctx.Input.GetData("username")
-	if auth != "admin" {
-		this.Ctx.Abort(403,"没有权限")
-	}
+	if id != 0 {
+		userId  := this.Ctx.Input.GetData("userId")
+		strId := strconv.Itoa(id)
+		if userId == strId {
+			o := orm.NewOrm()
+			user := new(models.User)
+			user.Id = id
+			json.Unmarshal(this.Ctx.Input.RequestBody, &user)
+			if user.Password == "" {
+				this.Ctx.Abort(400,"Password不能为空")
+			}
 
-	o := orm.NewOrm()
-	user := new(models.User)
-	json.Unmarshal(this.Ctx.Input.RequestBody, &user)
-	if user.Id == 0 {
-		this.Ctx.Abort(400,"Id不能为空")
+			if num,err :=o.Update(user,"Password"); num>0&&err ==nil {
+				this.Success("更新成功")
+			}else{
+				this.Fail(err.Error(),400)
+			}
 
-	}
-	if user.Name == "" {
-		this.Ctx.Abort(400,"Name不能为空")
+		}else{
+			this.Ctx.Abort(403,"没有权限")
+		}
 
-	}
-	if user.UserName == "" {
-		this.Ctx.Abort(400,"UserName不能为空")
-
-	}
-	if user.Password == "" {
-		this.Ctx.Abort(400,"Password不能为空")
-
-	}
-
-
-	if num,err :=o.Update(user,"Name","Password","Visible","Password"); num>0&&err ==nil {
-		this.Success("更新成功")
 	}else{
-		this.Fail(err.Error(),400)
+		auth := this.Ctx.Input.GetData("username")
+		if auth != "admin" {
+			this.Ctx.Abort(403,"没有权限")
+		}
+
+		o := orm.NewOrm()
+		user := new(models.User)
+		json.Unmarshal(this.Ctx.Input.RequestBody, &user)
+		if user.Id == 0 {
+			this.Ctx.Abort(400,"Id不能为空")
+		}
+		if user.Name == "" {
+			this.Ctx.Abort(400,"Name不能为空")
+		}
+		if user.UserName == "" {
+			this.Ctx.Abort(400,"UserName不能为空")
+		}
+		if user.Password == "" {
+			this.Ctx.Abort(400,"Password不能为空")
+		}
+
+		if num,err :=o.Update(user,"Name","Password","Visible","UserName"); num>0&&err ==nil {
+			this.Success("更新成功")
+		}else{
+			this.Fail(err.Error(),400)
+		}
 	}
-
-
 }

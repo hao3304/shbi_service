@@ -34,6 +34,7 @@ func init() {
 				claim, err :=util.ParseJwt(token)
 				if err == nil {
 					ctx.Input.SetData("username",claim.Audience)
+					ctx.Input.SetData("userId",claim.Id)
 				}else {
 					ctx.Abort(503,"认证失败，请重新登陆。")
 				}
