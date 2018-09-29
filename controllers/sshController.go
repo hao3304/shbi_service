@@ -43,6 +43,8 @@ func doAction(action string,mail string) (string, error)  {
 		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ma %s zimbraAccountStatus locked;/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail,mail)
 	case "active":
 		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ma %s zimbraAccountStatus active;/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail,mail)
+	case "gmi":
+		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov gmi %s ",mail)
 	default:
 		cmd = fmt.Sprintf("/opt/zimbra/bin/zmprov ga %s zimbraAccountStatus",mail)
 	}

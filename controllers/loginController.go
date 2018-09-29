@@ -30,9 +30,11 @@ func (this *LoginController) Post() {
 			token := struct{
 				Token string
 				Expires int64
+				Id int
 			}{
 				Token:t,
 				Expires:expires,
+				Id:user.Id,
 			}
 			this.Success(token)
 		}else{
